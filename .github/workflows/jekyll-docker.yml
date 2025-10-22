@@ -23,10 +23,7 @@ jobs:
 
       - name: Build site with Jekyll (Docker)
         run: |
-          docker run \
-            -v ${{ github.workspace }}:/srv/jekyll \
-            -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-            jekyll/builder:latest /bin/bash -c "bundle install && chmod -R 777 /srv/jekyll && jekyll build --future --trace"
+          docker run -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && bundle config set path 'vendor/bundle' && bundle install && jekyll build --future --trace"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
