@@ -1,7 +1,7 @@
 ---
 layout: poi
 wikidatum: Q136388936
-title:  Sinarades Philharmonic
+title:  Φιλαρμονική Σιναράδων
 ---
 Φιλαρμονική Σιναράδων
 
