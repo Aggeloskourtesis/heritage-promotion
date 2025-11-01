@@ -2,8 +2,8 @@
 layout: default
 load_leaflet: 1
 ---
-<!-- ====== ΕΝΑΡΞΗ ΠΕΡΙΕΧΟΜΕΝΟΥ ====== -->
 
+<!-- ====== ΕΝΑΡΞΗ ΠΕΡΙΕΧΟΜΕΝΟΥ ====== -->
 <section style="background:#003366; color:white; padding:40px 20px; border-radius:0 0 20px 20px;">
   <div style="max-width:900px; margin:auto; text-align:center;">
     <h1 style="font-size:48pt; margin-bottom:10px;">{{ page.title }}</h1>
@@ -17,7 +17,7 @@ load_leaflet: 1
   <div style="text-align:center; margin-bottom:30px;">
     <img id="wikidata_img" style="width:100%; max-width:700px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.2);" />
   </div>
-   
+
   <!-- Σύνδεσμος Wikipedia -->
   <div style="margin-bottom:30px; font-size:1.1em; line-height:1.6; color:#333; text-align:center;">
     <a id="wikidata_href" target="_blank" style="text-decoration:none; color:#0056b3; font-weight:bold;">
@@ -29,15 +29,16 @@ load_leaflet: 1
 
   <!-- Χάρτης -->
   <div id="mapid" style="height:400px; width:100%; border-radius:15px; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.15);"></div>
-   <!-- Κείμενο από το αρχείο -->
+
+  <!-- Κείμενο από το αρχείο -->
   <div style="margin-top:30px; font-size:1.1em; line-height:1.6; color:#222;">
     {{ content }}
   </div>
-  
+
   <!-- Κουμπί επιστροφής -->
   <div style="text-align:center; margin-top:30px;">
     <a href="{{ '/' | relative_url }}" style="background:#003366; color:white; padding:10px 20px; border-radius:8px; text-decoration:none; font-weight:bold;">
-      ← Επιστροφή στην λίστα
+      ← Επιστροφή στη λίστα
     </a>
   </div>
 
@@ -63,30 +64,58 @@ load_leaflet: 1
     .then(r => r.json())
     .then(data => {
       const e = data.entities[wikidatum];
- // Τίτλος και περιγραφή
+
+      // === Τίτλος και περιγραφή ===
       const title = e.labels?.el?.value || e.labels?.en?.value || '{{ page.title }}';
       const desc = e.descriptions?.el?.value || e.descriptions?.en?.value || '';
       document.getElementById('wikidata_descr').innerText = desc;
 
-      // Εικόνα
+      // === Εικόνα ===
       const img = e.claims?.P18?.[0]?.mainsnak?.datavalue?.value;
       if (img) {
         document.getElementById('wikidata_img').src =
           `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(img)}?width=800`;
       }
 
-      // Σύνδεσμος Wikipedia (αν υπάρχει)
+      // === Σύνδεσμος Wikipedia ===
       const wikiSite = e.sitelinks?.elwiki?.url || e.sitelinks?.enwiki?.url;
+      const wikiLink = document.getElementById('wikidata_href');
+      const wikiText = document.getElementById('wikipedia_title');
+
       if (wikiSite) {
-        document.getElementById('wikidata_href').href = wikiSite;
-        document.getElementById('wikipedia_title').innerText = "Άνοιγμα στη Wikipedia";
+        wikiLink.href = wikiSite;
+        wikiText.innerText = "Άνοιγμα στη Wikipedia";
+      } else {
+        wikiLink.removeAttribute('href');
+        wikiText.innerText = "Δεν υπάρχει σχετική σελίδα στη Wikipedia";
+        wikiText.style.color = "#999";
+        wikiText.style.fontStyle = "italic";
       }
-      
-      // Δημιουργία χάρτη (ένας μόνο!) 
-      const map = L.map('mapid', { fullscreenControl: true }).setView([lat,lon], 14); 
-      // Προσθήκη layer από το OpenStreetMap 
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map); 
-      // Marker στη θέση 
-      L.marker([lat, lon]).addTo(map) .bindPopup(<b>${title}</b><br>${desc}) .openPopup(); }) .catch(err => console.error('Wikidata error:', err));
-    }
+
+      // === Συντεταγμένες (P625) και χάρτης Leaflet ===
+      const coord = e.claims?.P625?.[0]?.mainsnak?.datavalue?.value;
+      const mapEl = document.getElementById('mapid');
+
+      if (coord && typeof coord.latitude === 'number' && typeof coord.longitude === 'number') {
+        const lat = coord.latitude;
+        const lon = coord.longitude;
+
+        const map = L.map('mapid', { fullscreenControl: true }).setView([lat, lon], 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map)
+          .bindPopup(`<b>${title}</b><br>${desc || ''}`);
+      } else {
+        // Μήνυμα όταν δεν υπάρχουν συντεταγμένες
+        mapEl.style.display = 'flex';
+        mapEl.style.alignItems = 'center';
+        mapEl.style.justifyContent = 'center';
+        mapEl.innerHTML = '<span style="color:#666;">Δεν βρέθηκαν συντεταγμένες στον Wikidata.</span>';
+      }
+    })
+    .catch(err => console.error('Wikidata error:', err));
 </script>
