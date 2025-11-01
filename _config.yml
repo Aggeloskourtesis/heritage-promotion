@@ -15,9 +15,9 @@
 # in the templates via {{ site.myvariable }}.
 title: Ιστοχώρος προβολής πολιτιστικού περιεχομένου
 email: 
-  -inf.dig2401@ionio.gr 
-  -inf.dig2403@ionio.gr 
-  -akourtesis@ionio.gr 
+  - inf.dig2401@ionio.gr 
+  - inf.dig2403@ionio.gr 
+  - akourtesis@ionio.gr 
 description: >- # this means to ignore newlines until "baseurl:"
   Ο ιστοχώρος αυτός αναπτύχτηκε από τους Βάκαλου Φρειδερίκη, Σπυρίδων Κουρούπης, Άγγελος Κουρτέσης
   στα πλαίσια εργασίας του μαθήματος Εργαλεία Προβολής 
