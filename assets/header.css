@@ -1,17 +1,24 @@
-header, .site-header {
-  background-color: #003366;
-  color: white;
-  text-align: center;
-  padding: 20px 0;
+/* ===== Εμφάνιση header ===== */
+.site-header {
+  background-color: #003366; /* Μπλε φόντο */
   border-bottom: 3px solid #002244;
 }
-header a, .site-header a {
-  color: white;
+
+/* Τίτλος επάνω αριστερά */
+.site-title,
+.site-title:visited {
+  color: #ffffff !important;
+}
+
+/* Σύνδεσμοι του μενού */
+.site-nav a {
+  color: #ffffff !important;
   text-decoration: none;
   margin: 0 15px;
   font-weight: bold;
   transition: color 0.3s ease;
 }
-header a:hover, .site-header a:hover {
-  color: #00ffe1;
+
+.site-nav a:hover {
+  color: #00ffe1 !important;
 }
