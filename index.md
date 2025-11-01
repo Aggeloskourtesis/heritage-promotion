@@ -1,9 +1,9 @@
 ---
 layout: default
-title: "Αγάλματα"
+title: "Μουσικά ιδρύματα της Κέρκυρας"
 ---
 
-<h1 style="text-align:center; margin-top:30px;">Αγάλματα</h1>
+<h1 style="text-align:center; margin-top:30px;">Μουσικά ιδρύματα της Κέρκυρας</h1>
 
 <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; padding:20px;">
   {% for poi in site.pois %}
