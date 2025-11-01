@@ -81,14 +81,7 @@ load_leaflet: 1
         document.getElementById('wikidata_href').href = wikiSite;
         document.getElementById('wikipedia_title').innerText = "Άνοιγμα στη Wikipedia";
       }
-      else {
-        // Αν δεν υπάρχει, εμφάνισε μήνυμα
-        wikiLink.removeAttribute('href'); // δεν χρειάζεται να είναι κλικαμπλ
-        wikiText.innerText = "Δεν υπάρχει σχετική σελίδα στη Wikipedia";
-        wikiText.style.color = "#999";
-        wikiText.style.fontStyle = "italic";
-      }
-
+      
       // === Συντεταγμένες από Wikidata (P625) και χάρτης Leaflet ===
       const coord = e.claims?.P625?.[0]?.mainsnak?.datavalue?.value; // {latitude, longitude}
       const mapEl = document.getElementById('mapid');
