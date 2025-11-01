@@ -81,26 +81,18 @@ load_leaflet: 1
         document.getElementById('wikidata_href').href = wikiSite;
         document.getElementById('wikipedia_title').innerText = "Άνοιγμα στη Wikipedia";
       }
-      
-      // === Συντεταγμένες από Wikidata (P625) και χάρτης Leaflet ===
-      const coord = e.claims?.P625?.[0]?.mainsnak?.datavalue?.value; // {latitude, longitude}
-      const mapEl = document.getElementById('mapid');
-
-      if (coord && typeof coord.latitude === 'number' && typeof coord.longitude === 'number') {
-        const lat = coord.latitude;
-        const lon = coord.longitude;
-
-        const map = L.map('mapid', { fullscreenControl: true }).setView([lat, lon], 14);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
-
-        L.marker([lat, lon]).addTo(map).bindPopup(`<b>${title}</b><br>${desc || ''}`);
-      } 
       else {
-        // Μήνυμα όταν δεν υπάρχουν συντεταγμένες
-        mapEl.style.display = 'flex';
-        mapEl.style.alignItems = 'center';
-        mapEl.style.justifyContent = 'center';
-        mapEl.innerHTML = '<span style="color:#666;">Δεν βρέθηκαν συντεταγμένες στον Wikidata.</span>';
+        // Αν δεν υπάρχει, εμφάνισε μήνυμα
+        wikiLink.removeAttribute('href'); // δεν χρειάζεται να είναι κλικαμπλ
+        wikiText.innerText = "Δεν υπάρχει σχετική σελίδα στη Wikipedia";
+        wikiText.style.color = "#999";
+        wikiText.style.fontStyle = "italic";
       }
+      
+      // Δημιουργία χάρτη (ένας μόνο!) 
+      const map = L.map('mapid', { fullscreenControl: true }).setView([lat,lon], 14); 
+      // Προσθήκη layer από το OpenStreetMap 
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map); 
+      // Marker στη θέση 
+      L.marker([lat, lon]).addTo(map) .bindPopup(<b>${title}</b><br>${desc}) .openPopup(); }) .catch(err => console.error('Wikidata error:', err));
 </script>
