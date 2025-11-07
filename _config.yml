@@ -24,8 +24,7 @@ baseurl: "heritage-promotion" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
 github_username:  Aggeloskourtesis
-facebook:
-  name: "Άγγελος Κουρτέσης"
+facebook_username: Άγγελος Κουρτέσης
   url: "https://www.facebook.com/profile.php?id=100025623182757"
 instagram_username: aggelos.kourtesis
 
